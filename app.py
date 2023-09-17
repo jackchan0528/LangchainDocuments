@@ -20,25 +20,39 @@ from langchain.agents.agent_toolkits import (
 
 # Set APIkey for OpenAI Service
 # Can sub this out for other LLM providers
-os.environ['OPENAI_API_KEY'] = 'youropenaiapikeyhere'
+def read_api_key():
+    with open('api_key.txt', 'r') as file:
+        api_key = file.read().strip()
+    return api_key
+
+os.environ['OPENAI_API_KEY'] = read_api_key()
 
 # Create instance of OpenAI LLM
 llm = OpenAI(temperature=0.1, verbose=True)
 embeddings = OpenAIEmbeddings()
 
+# Create an empty list to store the PDF file names
+pdf_files = []
+source_directory = './Source_PDF'
+# Get the pdf name
+for filename in os.listdir(source_directory):
+    if filename.endswith('.pdf'):
+        # If it's a PDF file, add its name to the list
+        pdf_files.append(filename)
 # Create and load PDF Loader
-loader = PyPDFLoader('annualreport.pdf')
+loader = PyPDFLoader(os.path.join(source_directory, pdf_files[0]))
 # Split pages from pdf 
 pages = loader.load_and_split()
 # Load documents into vector database aka ChromaDB
-store = Chroma.from_documents(pages, embeddings, collection_name='annualreport')
+store = Chroma.from_documents(pages, embeddings, collection_name='report')
 
 # Create vectorstore info object - metadata repo?
 vectorstore_info = VectorStoreInfo(
-    name="annual_report",
-    description="a banking annual report as a pdf",
+    name="general-pdf-report",
+    description="general document as a pdf",
     vectorstore=store
 )
+
 # Convert the document store into a langchain toolkit
 toolkit = VectorStoreToolkit(vectorstore_info=vectorstore_info)
 
@@ -48,12 +62,36 @@ agent_executor = create_vectorstore_agent(
     toolkit=toolkit,
     verbose=True
 )
-st.title('🦜🔗 GPT Investment Banker')
+
+# st.title('🦜🔗 GPT Investment Banker')
+st.title('Talk to your PDF')
+
+# # Ask the user to provide an openai API key
+# api_key = st.text_input('Input your OpenAI API Key here 👇',
+#                         type='password')
+
+# print(api_key)
+
 # Create a text input box for the user
-prompt = st.text_input('Input your prompt here')
+prompt = st.text_input('Input your question here 👇')
+
+# print(prompt)
+
+# # Allow advanced settings
+# with st.expander('Advanced settings'):
+#     # Slider for creativity
+#     temperature = st.slider('The level of creativity', 0, 1, 0.05)
+
+# f = st.file_uploader("Upload a file", type=(["tsv","csv","txt","tab","xlsx","xls"]))
+# if f is not None:
+#     path_in = f.name
+#     print(path_in)
+# else:
+#     path_in = None
 
 # If the user hits enter
-if prompt:
+# if prompt:
+if st.button("Ask Me!"):
     # Then pass the prompt to the LLM
     response = agent_executor.run(prompt)
     # ...and write it out to the screen

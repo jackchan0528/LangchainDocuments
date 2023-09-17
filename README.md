@@ -5,23 +5,11 @@ This project highlights how to leverage a ChromaDB vectorstore in a Langchain pi
 [![Tutorial](https://i.imgur.com/M7GcwGH.jpg)](https://youtu.be/u8vQyTzNGVY 'Tutorial')
 
 # Startup 🚀
-1. Create a virtual environment `python -m venv langchainenv`
+1. Create a virtual environment `python -m venv pdfbotenv`
 2. Activate it: 
-   - Windows:`.\langchainenv\Scripts\activate`
-   - Mac: `source langchain/bin/activate`
-3. Clone this repo `git clone https://github.com/nicknochnack/LangchainDocuments`
-4. Go into the directory `cd LangchainDocuments`
-5. Install the required dependencies `pip install -r requirements.txt`
-6. Add your OpenAI APIKey to line 22 of `app.py`
-7. Start the app `streamlit run app.py`  
-8. Go back to my YouTube channel and like and subscribe 😉...no seriously...please! lol 
-
-# Other References 🔗
-<p>The main LG Agent used:<a href="https://python.langchain.com/en/latest/modules/agents/toolkits/examples/vectorstore.html">Langchain VectorStore Agents
-</a></p>
-
-# Who, When, Why?
-👨🏾‍💻 Author: Nick Renotte <br />
-📅 Version: 1.?<br />
-📜 License: This project is licensed under the MIT License </br>
-
+   - Windows:`.\pdfbotenv\Scripts\activate`
+   - Mac: `source pdfbotenv/bin/activate`
+3. Install the required dependencies `pip install -r requirements.txt`
+4. Add your OpenAI APIKey to a file called "api_key.txt" by pasting it there.
+5. Add your PDF to Source_PDF/
+6. Start the app `streamlit run app.py` 
