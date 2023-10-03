@@ -1,3 +1,4 @@
 ignorable/
 .chroma/
 langchainenv/
+api_key.txt
