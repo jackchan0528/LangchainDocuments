@@ -1,7 +1,7 @@
 # import
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain.vectorstores.chroma import Chroma
 from langchain.document_loaders import TextLoader, PyPDFLoader
 from langchain.embeddings import OpenAIEmbeddings
 
@@ -20,21 +20,23 @@ def read_api_key():
         api_key = file.read().strip()
     return api_key
 import os
-os.environ['OPENAI_API_KEY'] = read_api_key()
+# os.environ['OPENAI_API_KEY'] = read_api_key()
 
-embeddings = OpenAIEmbeddings(openai_api_key=os.environ['OPENAI_API_KEY'])
+embeddings = OpenAIEmbeddings(openai_api_key=read_api_key())
 
 
 # # load it into Chroma
 # db = Chroma.from_documents(docs, embeddings)
 
 # save to disk
-db = Chroma.from_documents(docs, embeddings, collection_name='report', persist_directory="./chroma_db_temp")
+# db = Chroma.from_documents(docs, embeddings, collection_name='report', persist_directory="./chroma_db_temp3")
+
+db2 = Chroma(persist_directory="./chroma_db_temp3", embedding_function=embeddings)
 
 
 # query it
 query = "What is the performance of the company in the last year?"
-docs = db.similarity_search(query)
+docs = db2.similarity_search(query)
 
 # print results
 # print(docs[0].page_content)
