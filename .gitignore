@@ -2,3 +2,5 @@ ignorable/
 .chroma/
 langchainenv/
 api_key.txt
+langchainenv/
+pdfbotenv/
