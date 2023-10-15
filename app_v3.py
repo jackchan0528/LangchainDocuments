@@ -4,6 +4,7 @@ import os
 from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import TextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 # Bring in streamlit for UI/app interface
 import streamlit as st
 
@@ -52,7 +53,8 @@ def chatbot():
         loader = PyPDFLoader(os.path.join(source_directory, pdf_file))
         # Split pages from pdf 
         # pages = loader.load_and_split()
-        pages = loader.load_and_split(text_splitter=TextSplitter(chunk_size=1000, chunk_overlap=200))
+        # pages = loader.load_and_split(text_splitter=TextSplitter(chunk_size=1000, chunk_overlap=200))
+        pages = loader.load_and_split(text_splitter=RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap  = 200))
 
 
         all_pages.extend(pages)
