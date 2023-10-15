@@ -51,7 +51,7 @@ def savePDFtoDisk():
 
     print(len(documents))
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap  = 200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 200)
     texts = text_splitter.split_documents(documents=documents)
 
     print(len(texts))
