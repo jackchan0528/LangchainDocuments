@@ -41,21 +41,26 @@ os.environ['OPENAI_API_KEY'] = read_api_key()
 # -----------------------------------------------------------
 
 def savePDFtoDisk():
+    st.write("Saving to the database...")
+    progress_bar = st.progress(0)
     # Create instance of OpenAI LLM
     llm = OpenAI(temperature=0.1, verbose=True)
     embeddings = OpenAIEmbeddings(openai_api_key=os.environ['OPENAI_API_KEY'])
 
-    loader = DirectoryLoader('./Source_PDF/', glob="./*.pdf", loader_cls=PyPDFLoader)
+    loader = DirectoryLoader('./pdfs/', glob="./*.pdf", loader_cls=PyPDFLoader)
 
     documents = loader.load()
 
-    print(len(documents))
+    # print(len(documents))
+    progress_bar.progress(25)
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 200)
     texts = text_splitter.split_documents(documents=documents)
 
-    print(len(texts))
-    print(texts[1])
+    progress_bar.progress(50)
+
+    # print(len(texts))
+    # print(texts[1])
     # texts = loader.load_and_split(text_splitter=text_splitter)
 
     # # Create an empty list to store the PDF file names
@@ -79,11 +84,13 @@ def savePDFtoDisk():
     #     all_pages.extend(pages)
     
     
-    persist_directory = './chromadb_disk_tp'
+    persist_directory = './chromadb'
     store = Chroma.from_documents(documents=texts, 
                                   embedding=embeddings, 
                                   persist_directory=persist_directory)
     # store = Chroma.from_documents(documents=texts, embedding=embeddings, metadatas=[{"source": s} for s in pdf_files], persist_directory=persist_directory)
+
+    progress_bar.progress(99)
 
     store.persist()
     # store = None
@@ -95,6 +102,8 @@ def savePDFtoDisk():
     # # # Save Chromadb locally
     # # persist_directory = 'chroma_database.db'
     # store.save_to_file(persist_directory)
+    # print("Save completed!")
+    st.success("Task completed. Data saved to the database.")
 
 
 savePDFtoDisk()
